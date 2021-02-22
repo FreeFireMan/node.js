@@ -24,7 +24,7 @@ const dataBasePath = path.join(__dirname, 'dataBase', 'users.json');
 const app = express();
 
 app.listen(5000, () => {
-    console.log('the server is ready');
+    console.log('the server is listen on port 5000');
 })
 
 app.use(express.json());
@@ -35,13 +35,18 @@ app.set('view engine', '.hbs');
 app.engine('.hbs', expressHbs({defaultLayout: false}));
 app.set('views', path.join(__dirname, 'static'));
 
-app.get('/users', (req, res) => {
-    fs.readFile(dataBasePath, (err, data) => {
-        if (err) console.log(err);
-        const users = JSON.parse(data.toString());
-        res.render('users', {users});
-        console.log(users);
-    });
+app.get('/users', async (req, res) => {
+    // fs.readFile(dataBasePath, (err, data) => {
+    //     if (err) console.log(err);
+    //     const users = JSON.parse(data.toString());
+    //     res.render('users', {users});
+    //     console.log(users);
+    // });
+
+    const users = JSON.parse(fs.readFileSync(dataBasePath, 'utf8'))
+    console.log(users);
+    res.render('users', {users});
+
 });
 
 app.get('/users/:userId', (req, res) => {
